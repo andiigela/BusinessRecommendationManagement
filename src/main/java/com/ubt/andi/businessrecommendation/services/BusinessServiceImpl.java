@@ -15,7 +15,7 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public Business getBusinessById(Long id) {
         if(id == 0 || id == null) return null;
-        return businessRepository.findById(id).get();
+        return businessRepository.findByIdWithImages(id);
     }
 
     @Override
