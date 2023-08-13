@@ -8,6 +8,9 @@
 <body>
   <h2>Edit Business</h2>
   <form method="post" th:action="@{/business/edit/{businessId}(businessId=${businessEdit.id})}" th:object="${businessEdit}" enctype="multipart/form-data">
+    <div class="form-group">
+      <img th:each="image : ${businessEdit.images}" th:src="@{/images/__${image.photoUrl}__}" width="200" height="200" th:alt="${image.photoUrl}"/>
+    </div>
     <input type="hidden" class="form-control" th:field="${businessEdit.id}" id="id" aria-describedby="emailHelp" placeholder="id">
     <div class="form-group">
       <label for="name">Name</label>

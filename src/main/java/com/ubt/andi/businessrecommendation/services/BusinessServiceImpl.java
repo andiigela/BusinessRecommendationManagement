@@ -25,6 +25,11 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
+    public List<Business> findBusinessesByName(String name) {
+        if(name.trim().isEmpty() || name == null) return null;
+        return businessRepository.findByNameContainingIgnoreCase(name);
+    }
+    @Override
     public void deleteBusiness(Long id) {
         if(id == 0 || id == null) return;
         businessRepository.deleteById(id);

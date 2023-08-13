@@ -27,8 +27,15 @@ public class ImageUploadServiceImpl implements ImageUploadService{
     }
     @Override
     public void uploadImage(MultipartFile imageFile) throws IOException {
-        String filepath = "src/main/resources/images/" + imageFile.getOriginalFilename();
-        Path destination = Paths.get(filepath);
+        String baseFile = "src/main/resources/static/images/";
+        String filePath = baseFile + imageFile.getOriginalFilename();
+        Path destination = Paths.get(filePath);
+        int counter = 1;
+        while(Files.exists(destination)){
+            String newFileName = imageFile.getOriginalFilename().replace(".","_" + counter + ".");
+            destination = Paths.get(baseFile + newFileName);
+            counter++;
+        }
         Files.copy(imageFile.getInputStream(),destination, StandardCopyOption.REPLACE_EXISTING);
     }
 }

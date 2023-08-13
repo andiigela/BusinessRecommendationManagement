@@ -2,6 +2,7 @@ package com.ubt.andi.businessrecommendation.controllers;
 
 import com.ubt.andi.businessrecommendation.models.Business;
 import com.ubt.andi.businessrecommendation.models.Image;
+import com.ubt.andi.businessrecommendation.models.SearchForm;
 import com.ubt.andi.businessrecommendation.services.BusinessService;
 import com.ubt.andi.businessrecommendation.services.ImageUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +49,12 @@ public class BusinessController {
             Image image = new Image();
             image.setPhotoUrl(imageFile.getOriginalFilename());
             image.setBusiness(business);
+            imageUploadService.createImage(image);
             images.add(image);
             imageUploadService.uploadImage(imageFile);
+
         }
         business.setImages(images);
-        for (Image image : images) {
-            imageUploadService.createImage(image);
-        }
         businessService.createBusiness(business);
         return "redirect:/business";
     }
@@ -65,7 +65,19 @@ public class BusinessController {
         return "business-edit";
     }
     @PostMapping("/business/edit/{businessId}")
-    public String editBusiness(@ModelAttribute("businessEdit") Business business){
+    public String editBusiness(@ModelAttribute("businessEdit") Business business,
+                               @RequestParam("imageFiles") List<MultipartFile> imageFiles) throws IOException{
+        businessService.updateBusiness(business);
+        List<Image> images = new ArrayList<>();
+        for(MultipartFile imageFile : imageFiles){
+            Image image = new Image();
+            image.setPhotoUrl(imageFile.getOriginalFilename());
+            image.setBusiness(business);
+            imageUploadService.createImage(image);
+            images.add(image);
+            imageUploadService.uploadImage(imageFile);
+        }
+        business.setImages(images);
         businessService.updateBusiness(business);
         return "redirect:/business";
     }
@@ -79,5 +91,18 @@ public class BusinessController {
                               @RequestParam("photoFile") MultipartFile photoFile) throws IOException {
 
         return "redirect:/business/list";
+    }
+
+    @GetMapping("/search")
+    public String searchForm(Model model){
+        model.addAttribute("business", new Business());
+        return "search-page";
+    }
+    @GetMapping("/search/")
+    public String searchByName(@RequestParam("name") String name,Model model){
+        List<Business> businessListByName = businessService.findBusinessesByName(name);
+        System.out.println("Size: " + businessListByName.size());
+        model.addAttribute("businesses",businessListByName);
+        return "search-results";
     }
 }
