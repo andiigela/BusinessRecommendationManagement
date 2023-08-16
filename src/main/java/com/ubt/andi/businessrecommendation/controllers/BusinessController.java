@@ -2,7 +2,6 @@ package com.ubt.andi.businessrecommendation.controllers;
 
 import com.ubt.andi.businessrecommendation.models.Business;
 import com.ubt.andi.businessrecommendation.models.Image;
-import com.ubt.andi.businessrecommendation.models.SearchForm;
 import com.ubt.andi.businessrecommendation.services.BusinessService;
 import com.ubt.andi.businessrecommendation.services.ImageUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,13 +41,14 @@ public class BusinessController {
         businessService.createBusiness(business);
         List<Image> images = new ArrayList<>();
         for(MultipartFile imageFile : imageFiles){
-            Image image = new Image();
-            image.setPhotoUrl(imageFile.getOriginalFilename());
-            image.setBusiness(business);
-            imageUploadService.createImage(image);
-            images.add(image);
-            imageUploadService.uploadImage(imageFile);
-
+            if(!imageFile.isEmpty()){
+                Image image = new Image();
+                String fileName = imageUploadService.uploadImage(imageFile);
+                image.setPhotoUrl(fileName);
+                image.setBusiness(business);
+                imageUploadService.createImage(image);
+                images.add(image);
+            }
         }
         business.setImages(images);
         businessService.createBusiness(business);
@@ -61,21 +57,24 @@ public class BusinessController {
     @GetMapping("/business/edit/{businessId}")
     public String editBusinessForm(@PathVariable("businessId") Long id,Model model){
         Business business = businessService.getBusinessById(id);
-        model.addAttribute("businessEdit",business);
+        if(business != null){
+            model.addAttribute("businessEdit",business);
+        }
         return "business-edit";
     }
     @PostMapping("/business/edit/{businessId}")
     public String editBusiness(@ModelAttribute("businessEdit") Business business,
                                @RequestParam("imageFiles") List<MultipartFile> imageFiles) throws IOException{
-        businessService.updateBusiness(business);
-        List<Image> images = new ArrayList<>();
+            List<Image> images = new ArrayList<>();
         for(MultipartFile imageFile : imageFiles){
-            Image image = new Image();
-            image.setPhotoUrl(imageFile.getOriginalFilename());
-            image.setBusiness(business);
-            imageUploadService.createImage(image);
-            images.add(image);
-            imageUploadService.uploadImage(imageFile);
+            if(!imageFile.isEmpty()){
+                Image image = new Image();
+                String fileName = imageUploadService.uploadImage(imageFile);
+                image.setPhotoUrl(fileName);
+                image.setBusiness(business);
+                imageUploadService.createImage(image);
+                images.add(image);
+            }
         }
         business.setImages(images);
         businessService.updateBusiness(business);
@@ -86,13 +85,12 @@ public class BusinessController {
         businessService.deleteBusiness(id);
         return "redirect:/business";
     }
+    /*
     @PostMapping("/add/images")
     public String addBusiness(@ModelAttribute Business business,
-                              @RequestParam("photoFile") MultipartFile photoFile) throws IOException {
-
+                              ) throws IOException {
         return "redirect:/business/list";
-    }
-
+    }*/
     @GetMapping("/search")
     public String searchForm(Model model){
         model.addAttribute("business", new Business());
@@ -105,4 +103,11 @@ public class BusinessController {
         model.addAttribute("businesses",businessListByName);
         return "search-results";
     }
+    /*
+    @PostMapping("/business/deleteImage")
+    public String deleteImage(@RequestParam("imageToDelete") String imageUrl) throws IOException{
+        imageUploadService.deleteImage(imageUrl);
+        return "redirect:/business";
+    }
+    */
 }

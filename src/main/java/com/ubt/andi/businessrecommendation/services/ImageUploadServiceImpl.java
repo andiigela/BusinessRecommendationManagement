@@ -26,16 +26,26 @@ public class ImageUploadServiceImpl implements ImageUploadService{
         imageRepository.save(image);
     }
     @Override
-    public void uploadImage(MultipartFile imageFile) throws IOException {
+    public String uploadImage(MultipartFile imageFile) throws IOException {
         String baseFile = "src/main/resources/static/images/";
-        String filePath = baseFile + imageFile.getOriginalFilename();
+        String fileName = imageFile.getOriginalFilename();
+        String filePath = baseFile + fileName;
         Path destination = Paths.get(filePath);
         int counter = 1;
         while(Files.exists(destination)){
-            String newFileName = imageFile.getOriginalFilename().replace(".","_" + counter + ".");
-            destination = Paths.get(baseFile + newFileName);
+            fileName = imageFile.getOriginalFilename().replace(".","_" + counter + ".");
+            destination = Paths.get(baseFile + fileName);
             counter++;
         }
         Files.copy(imageFile.getInputStream(),destination, StandardCopyOption.REPLACE_EXISTING);
+        return fileName;
+    }
+    @Override
+    public void deleteImage(String imageUrl) throws IOException {
+        String baseFile = "src/main/resources/static/images/";
+        String filePath = baseFile + imageUrl;
+        Path destination = Paths.get(filePath);
+        Files.deleteIfExists(destination);
+        imageRepository.deleteImageByUrl(imageUrl);
     }
 }
