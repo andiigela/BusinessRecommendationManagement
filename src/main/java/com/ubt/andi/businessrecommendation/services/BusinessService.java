@@ -10,4 +10,5 @@ public interface BusinessService {
     Business getBusinessById(Long id);
     void updateBusiness(Business business);
     void deleteBusiness(Long id);
+    List<Business> findBusinessesByName(String name);
 }

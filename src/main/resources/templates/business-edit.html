@@ -7,22 +7,48 @@
 </head>
 <body>
   <h2>Edit Business</h2>
-  <form method="post" th:action="@{/business/edit/{businessId}(businessId=${businessEdit.id})}" th:object="${businessEdit}">
-    <input type="hidden" class="form-control" th:field="${businessEdit.id}" id="id" aria-describedby="emailHelp" placeholder="id">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" class="form-control" th:field="${businessEdit.name}" id="name" aria-describedby="emailHelp" placeholder="Name">
+  <div class="form-group text-center">
+    <div class="d-flex flex-row justify-content-center flex-wrap">
+      <div th:each="image : ${businessEdit.images}" class="flex-item">
+        <img th:src="@{/images/__${image.photoUrl}__}" width="200" height="200" th:alt="${image.photoUrl}" style="margin-right: 10px" />
+      </div>
     </div>
-    <div class="form-group">
-      <label for="dateOfCreation">Date of Creation</label>
-      <input type="datetime-local" class="form-control"  th:field="${businessEdit.dateOfCreation}" id="dateOfCreation" placeholder="Date of Creation">
+  </div>
+  <!--
+    <div class="form-group text-center">
+      <div class="d-flex flex-row justify-content-center flex-wrap">
+        <div th:each="image : ${businessEdit.images}" class="flex-item">
+          <form method="post" th:action="@{/business/deleteImage}">
+            <img th:src="@{/images/__${image.photoUrl}__}" width="200" height="200" th:alt="${image.photoUrl}" style="margin-right: 10px" />
+            <div class="d-flex flex-column align-items-center">
+              <input type="hidden" th:value="${image.photoUrl}" name="imageToDelete"/>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">X</button>
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="location">Location</label>
-      <input type="text" class="form-control" th:field="${businessEdit.location}" id="location" placeholder="Location">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    -->
+    <form method="post" th:action="@{/business/edit/{businessId}(businessId=${businessEdit.id})}" th:object="${businessEdit}" enctype="multipart/form-data">
+      <input type="hidden" class="form-control" th:field="${businessEdit.id}" id="id" aria-describedby="emailHelp" placeholder="id">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" th:field="${businessEdit.name}" id="name" aria-describedby="emailHelp" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <label for="dateOfCreation">Date of Creation</label>
+        <input type="datetime-local" class="form-control" th:field="${businessEdit.dateOfCreation}" id="dateOfCreation" placeholder="Date of Creation">
+      </div>
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" class="form-control" th:field="${businessEdit.location}" id="location" placeholder="Location">
+      </div>
+      <div class="form-group">
+        <label for="images">Images</label>
+        <input class="form-control" type="file" th:field="${businessEdit.imageFiles}" name="imageFiles" id="images" multiple />
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
