@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class Business {
+public class Business  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,5 +24,17 @@ public class Business {
     private List<Image> images = new ArrayList<Image>();
     @Transient
     private List<MultipartFile> imageFiles = new ArrayList<>();
-
+    @Override
+    public boolean equals(Object obj){
+        if(obj instanceof Business){
+            Business b = (Business) obj;
+            if(b.id == this.id){
+                return true;
+            }
+        }
+        return false;
+    }
+    @ManyToOne
+    @JoinColumn(name = "applicationuser_id",nullable = false)
+    private ApplicationUser applicationUser;
 }
