@@ -18,4 +18,5 @@ public class Image {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id")
     private Business business;
+
 }
