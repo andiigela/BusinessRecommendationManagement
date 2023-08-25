@@ -1,7 +1,9 @@
 package com.ubt.andi.businessrecommendation.controllers;
 import com.ubt.andi.businessrecommendation.models.ApplicationUser;
 import com.ubt.andi.businessrecommendation.services.ApplicationUserService;
+import com.ubt.andi.businessrecommendation.services.EmailService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -9,17 +11,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Controller
 public class AuthController {
 
     private ApplicationUserService userService;
+    private EmailService emailService;
     @Autowired
-    public AuthController(ApplicationUserService userService){
+    public AuthController(ApplicationUserService userService,EmailService emailService){
         this.userService=userService;
+        this.emailService=emailService;
     }
     @GetMapping("/register")
     public String registerForm(Model model){
@@ -28,7 +34,7 @@ public class AuthController {
         return "register-form";
     }
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("user") ApplicationUser user, BindingResult bindingResult,Model model){
+    public String registerUser(@Valid @ModelAttribute("user") ApplicationUser user, BindingResult bindingResult,Model model) throws UnsupportedEncodingException {
         ApplicationUser existingEmail = userService.findByEmail(user.getEmail());
         if(existingEmail != null){
             bindingResult.rejectValue("email", "duplicate.email", "There is already a user with that email");
@@ -40,6 +46,10 @@ public class AuthController {
             model.addAttribute("user",user);
             return "register-form";
         }
+        String generatedToken = EmailService.generateToken();
+        String tokenWithoutHyphens = generatedToken.replace("-","");
+        user.setConfirmationToken(tokenWithoutHyphens);
+        emailService.sendEmail(user.getEmail(),tokenWithoutHyphens);
         userService.saveUser(user);
         return "redirect:/business";
     }
@@ -67,5 +77,15 @@ public class AuthController {
     @GetMapping("/dashboard")
     public String dashboardPage(){
         return "dashboard-page";
+    }
+    @GetMapping("/confirm")
+    public String redirectFromEmail(@RequestParam("token") String token){
+        ApplicationUser user = userService.findByConfirmationToken(token);
+        if(user != null){
+            user.setEmailConfirmed(true);
+            userService.updateUser(user);
+            return "redirect:/login";
+        }
+        return "redirect:/register";
     }
 }

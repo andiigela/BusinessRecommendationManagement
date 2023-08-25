@@ -27,10 +27,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         CustomUserDetails authUser = new CustomUserDetails(
                 user.getUsername(),
                 user.getPassword(),
-                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
+                user.getRoles().stream().map(
+                        role -> new SimpleGrantedAuthority(role.getName())
+                        )
                         .collect(Collectors.toList()),
                 user.getEmail()
         );
+        if(!user.isEmailConfirmed()) authUser.eraseCredentials();
         return authUser;
     }
 }

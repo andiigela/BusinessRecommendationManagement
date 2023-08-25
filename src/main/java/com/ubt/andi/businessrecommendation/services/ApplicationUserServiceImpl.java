@@ -31,6 +31,11 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         user.setRoles(Arrays.asList(role));
         userRepository.save(user);
     }
+    @Override
+    public void updateUser(ApplicationUser user){
+        if(user == null) return;
+        userRepository.save(user);
+    }
 
     @Override
     public ApplicationUser findByEmail(String email) {
@@ -41,5 +46,11 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     public ApplicationUser findByUsername(String username) {
         if(username.trim().isEmpty() || username == null) return null;
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public ApplicationUser findByConfirmationToken(String token) {
+        if(token.trim().isEmpty() || token == null) return null;
+        return userRepository.findByConfirmationToken(token);
     }
 }

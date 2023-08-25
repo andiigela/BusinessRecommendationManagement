@@ -40,6 +40,7 @@ public class WebSecurityConfiguration {
         http.authorizeRequests()
                 .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/confirm")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/admin")).hasRole("User")
                 .anyRequest()
