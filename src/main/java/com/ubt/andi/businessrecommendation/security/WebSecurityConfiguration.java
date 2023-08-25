@@ -40,12 +40,18 @@ public class WebSecurityConfiguration {
         http.authorizeRequests()
                 .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/admin")).hasRole("User")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/admin").loginProcessingUrl("/login").permitAll();
+                .loginPage("/login").defaultSuccessUrl("/dashboard").loginProcessingUrl("/login")
+                .permitAll()
+                .and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID")
+                .permitAll();
         return http.build();
     }
     public void configureAuthenticationManager(AuthenticationManagerBuilder builder) throws Exception{
