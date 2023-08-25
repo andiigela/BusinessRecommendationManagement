@@ -3,6 +3,9 @@ import com.ubt.andi.businessrecommendation.models.ApplicationUser;
 import com.ubt.andi.businessrecommendation.services.ApplicationUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,8 +45,12 @@ public class AuthController {
     }
     @GetMapping("/login")
     public String loginForm(Model model){
-        model.addAttribute("loggedInUser",new ApplicationUser());
-        return "login-form";
+        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
+        if(authUser instanceof AnonymousAuthenticationToken){
+            model.addAttribute("loggedInUser",new ApplicationUser());
+            return "login-form";
+        }
+        return "redirect:/dashboard";
     }
     @PostMapping("/login")
     public String loginUser(@ModelAttribute("loggedInUser") ApplicationUser user){
@@ -56,5 +63,9 @@ public class AuthController {
     @GetMapping("/admin")
     public String adminForm(){
         return "admin-page";
+    }
+    @GetMapping("/dashboard")
+    public String dashboardPage(){
+        return "dashboard-page";
     }
 }

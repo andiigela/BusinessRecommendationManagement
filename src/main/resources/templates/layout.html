@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Business Management</title>
+    <th:block th:fragment="common-resources">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    </th:block>
+</head>
+<body>
+    <div th:fragment="content">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" th:href="@{/}">WebSiteName</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Page 1</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li th:if="${#authorization.expression('isAnonymous()')}"><a th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li th:if="${#authorization.expression('isAnonymous()')}"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li th:unless="${#authorization.expression('isAnonymous()')}" ><a href="#"><span class="glyphicon glyphicon-user" th:text="${#authentication.getName()}"></span></a></li>
+                    <li th:unless="${#authorization.expression('isAnonymous()')}" ><a th:href="@{/logout}"><span class="glyphicon glyphicon-user"></span>Log out</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <th:block th:fragment="common-scripts">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </th:block>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.ubt.andi.businessrecommendation.security;
 
+import com.ubt.andi.businessrecommendation.DTOs.CustomUserDetails;
 import com.ubt.andi.businessrecommendation.models.ApplicationUser;
 import com.ubt.andi.businessrecommendation.services.ApplicationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         ApplicationUser user = userService.findByUsername(username);
         if(user == null) throw new UsernameNotFoundException("User not found !!");
-        User authUser = new User(
-                user.getEmail(),
+        CustomUserDetails authUser = new CustomUserDetails(
+                user.getUsername(),
                 user.getPassword(),
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                user.getEmail()
         );
         return authUser;
     }
