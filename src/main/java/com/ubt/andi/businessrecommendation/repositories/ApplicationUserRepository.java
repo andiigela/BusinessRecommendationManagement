@@ -7,4 +7,5 @@ public interface ApplicationUserRepository extends JpaRepository<ApplicationUser
     ApplicationUser findByEmail(String email);
     ApplicationUser findByUsername(String username);
     ApplicationUser findByConfirmationToken(String token);
+    ApplicationUser findApplicationUserById(Long id);
 }

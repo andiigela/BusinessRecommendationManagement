@@ -31,7 +31,7 @@ public class EmailService{
         message.setTo(to);
         message.setSubject("Email Confirmation");
         String confirmationToken = generatedToken;
-        String confirmationLink = "https://localhost:8080/confirm?token=" + confirmationToken;
+        String confirmationLink = "http://localhost:8080/confirm?token=" + confirmationToken;
         message.setText("Click the Link to activate your account: " + confirmationLink);
         javaMailSender.send(message);
     }

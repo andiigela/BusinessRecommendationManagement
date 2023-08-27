@@ -38,16 +38,16 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception{
         http.authorizeRequests()
-                .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/confirm")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/admin")).hasRole("User")
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/dashboard").loginProcessingUrl("/login")
+                .formLogin().loginPage("/login")
+                .defaultSuccessUrl("/dashboard").loginProcessingUrl("/login")
                 .permitAll()
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
@@ -57,5 +57,5 @@ public class WebSecurityConfiguration {
     }
     public void configureAuthenticationManager(AuthenticationManagerBuilder builder) throws Exception{
         builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+     }
 }

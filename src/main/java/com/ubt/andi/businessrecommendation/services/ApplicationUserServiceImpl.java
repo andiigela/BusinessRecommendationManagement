@@ -34,6 +34,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     @Override
     public void updateUser(ApplicationUser user){
         if(user == null) return;
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -46,6 +47,12 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     public ApplicationUser findByUsername(String username) {
         if(username.trim().isEmpty() || username == null) return null;
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public ApplicationUser findById(Long id) {
+        if(id == 0 || id == null) return null;
+        return userRepository.findApplicationUserById(id);
     }
 
     @Override
