@@ -1,5 +1,6 @@
 package com.ubt.andi.businessrecommendation.controllers;
 import com.ubt.andi.businessrecommendation.models.ApplicationUser;
+import com.ubt.andi.businessrecommendation.models.Business;
 import com.ubt.andi.businessrecommendation.services.ApplicationUserService;
 import com.ubt.andi.businessrecommendation.services.EmailService;
 import jakarta.validation.Valid;
@@ -62,6 +63,8 @@ public class AuthController {
         }
         return "redirect:/dashboard";
     }
+
+    /*
     @PostMapping("/login")
     public String loginUser(@ModelAttribute("loggedInUser") ApplicationUser user){
         ApplicationUser username = userService.findByUsername(user.getUsername());
@@ -69,7 +72,7 @@ public class AuthController {
             return "welcome-page";
         }
         return "login-form";
-    }
+    }*/
     @GetMapping("/admin")
     public String adminForm(){
         return "admin-page";
@@ -87,5 +90,27 @@ public class AuthController {
             return "redirect:/login";
         }
         return "redirect:/register";
+    }
+    @GetMapping("/profile/edit/{username}")
+    public String editProfilePage(@PathVariable("username") String username,Model model){
+        ApplicationUser user = userService.findByUsername(username);
+        if(user != null){
+            model.addAttribute("user",user);
+            return "profile-page";
+        }
+        return "redirect:/dashboard";
+
+    }
+    @PostMapping("/profile/edit")
+    public String editProfile(@ModelAttribute("user") ApplicationUser user,@RequestParam("passwordConfirm") String passwordConfirm){
+        ApplicationUser userDb = userService.findById(user.getId());
+        if(userDb != null){
+            if(user.getPassword() == null || user.getPassword().isEmpty()) user.setPassword(userDb.getPassword());
+            user.setConfirmationToken(userDb.getConfirmationToken());
+            user.setEmailConfirmed(userDb.isEmailConfirmed());
+            userService.updateUser(user);
+            return "redirect:/dashboard";
+        }
+        return "redirect:/profile";
     }
 }

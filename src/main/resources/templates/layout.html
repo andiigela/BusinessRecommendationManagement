@@ -22,7 +22,7 @@
                     <li th:if="${#authorization.expression('isAnonymous()')}"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li th:unless="${#authorization.expression('isAnonymous()')}" ><a href="#"><span class="glyphicon glyphicon-user" th:text="${#authentication.getName()}"></span></a></li>
+                    <li th:unless="${#authorization.expression('isAnonymous()')}" ><a th:href="@{/profile/edit/{id}(id=${#authentication.getName()})}"><span class="glyphicon glyphicon-user" th:text="${#authentication.getName()}"></span></a></li>
                     <li th:unless="${#authorization.expression('isAnonymous()')}" ><a th:href="@{/logout}"><span class="glyphicon glyphicon-user"></span>Log out</a></li>
                 </ul>
             </div>
