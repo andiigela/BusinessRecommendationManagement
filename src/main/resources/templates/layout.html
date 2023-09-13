@@ -12,10 +12,11 @@
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" th:href="@{/}">WebSiteName</a>
+                    <a class="navbar-brand" th:href="@{/}">Business Management</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Page 1</a></li>
+                    <li><a th:href="@{/business}">My Businesses</a></li>
+                    <li><a th:href="@{/roles}">Roles</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${#authorization.expression('isAnonymous()')}"><a th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
