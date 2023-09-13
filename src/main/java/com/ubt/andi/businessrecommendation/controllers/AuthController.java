@@ -50,8 +50,8 @@ public class AuthController {
         String generatedToken = EmailService.generateToken();
         String tokenWithoutHyphens = generatedToken.replace("-","");
         user.setConfirmationToken(tokenWithoutHyphens);
-        emailService.sendEmail(user.getEmail(),tokenWithoutHyphens);
         userService.saveUser(user);
+       // emailService.sendEmail(user.getEmail(),tokenWithoutHyphens);
         return "redirect:/business";
     }
     @GetMapping("/login")
@@ -63,16 +63,6 @@ public class AuthController {
         }
         return "redirect:/dashboard";
     }
-
-    /*
-    @PostMapping("/login")
-    public String loginUser(@ModelAttribute("loggedInUser") ApplicationUser user){
-        ApplicationUser username = userService.findByUsername(user.getUsername());
-        if(username != null && username.getPassword().equals(user.getPassword())){
-            return "welcome-page";
-        }
-        return "login-form";
-    }*/
     @GetMapping("/admin")
     public String adminForm(){
         return "admin-page";

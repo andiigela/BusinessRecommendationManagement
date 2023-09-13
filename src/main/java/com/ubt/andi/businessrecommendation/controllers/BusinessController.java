@@ -65,7 +65,7 @@ public class BusinessController {
     @PostMapping("/business/edit/{businessId}")
     public String editBusiness(@ModelAttribute("businessEdit") Business business,
                                @RequestParam("imageFiles") List<MultipartFile> imageFiles) throws IOException{
-            List<Image> images = new ArrayList<>();
+        List<Image> images = new ArrayList<>();
         for(MultipartFile imageFile : imageFiles){
             if(!imageFile.isEmpty()){
                 Image image = new Image();

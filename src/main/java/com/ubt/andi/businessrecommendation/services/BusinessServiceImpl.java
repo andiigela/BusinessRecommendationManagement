@@ -46,15 +46,15 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public void createBusiness(Business business) {
         if(business == null) return;
-        String email = SecurityContextUtil.getSessionUser();
-        ApplicationUser authUser = userService.findByEmail(email);
+        String username = SecurityContextUtil.getSessionUser();
+        ApplicationUser authUser = userService.findByUsername(username);
         business.setApplicationUser(authUser);
         businessRepository.save(business);
     }
 
     @Override
     public List<Business> getBusinesses() {
-        String email = SecurityContextUtil.getSessionUser();
-        return businessRepository.findBusinessesByApplicationUser(email);
+        String username = SecurityContextUtil.getSessionUser();
+        return businessRepository.findBusinessesByApplicationUser(username);
     }
 }
