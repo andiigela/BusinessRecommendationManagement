@@ -1,5 +1,7 @@
 package com.ubt.andi.businessrecommendation.services;
 
+import com.ubt.andi.businessrecommendation.controllers.SecurityContextUtil;
+import com.ubt.andi.businessrecommendation.models.ApplicationUser;
 import com.ubt.andi.businessrecommendation.models.Business;
 import com.ubt.andi.businessrecommendation.repositories.BusinessRepository;
 import org.springframework.stereotype.Service;
@@ -8,8 +10,11 @@ import java.util.List;
 @Service
 public class BusinessServiceImpl implements BusinessService {
     private BusinessRepository businessRepository;
-    public BusinessServiceImpl(BusinessRepository businessRepository){
+    private ApplicationUserService userService;
+    public BusinessServiceImpl(BusinessRepository businessRepository,
+                               ApplicationUserService userService){
         this.businessRepository=businessRepository;
+        this.userService=userService;
     }
 
     @Override
@@ -21,6 +26,9 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public void updateBusiness(Business business) {
         if(business == null) return;
+        String email = SecurityContextUtil.getSessionUser();
+        ApplicationUser authUser = userService.findByUsername(email);
+        business.setApplicationUser(authUser);
         businessRepository.save(business);
     }
 
@@ -38,11 +46,15 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public void createBusiness(Business business) {
         if(business == null) return;
+        String username = SecurityContextUtil.getSessionUser();
+        ApplicationUser authUser = userService.findByUsername(username);
+        business.setApplicationUser(authUser);
         businessRepository.save(business);
     }
 
     @Override
     public List<Business> getBusinesses() {
-        return businessRepository.findAll();
+        String username = SecurityContextUtil.getSessionUser();
+        return businessRepository.findBusinessesByApplicationUser(username);
     }
 }

@@ -12,4 +12,6 @@ public interface BusinessRepository extends JpaRepository<Business,Long> {
     //@Query("SELECT DISTINCT b FROM Business b WHERE LOWER(b.name) LIKE CONCAT('%', LOWER(:name), '%')")
     //List<Business> findByNameWithImages(@Param("name") String name);
     List<Business> findByNameContainingIgnoreCase(String name);
+    @Query("SELECT DISTINCT b from Business b JOIN FETCH b.applicationUser a where a.username=:username")
+    List<Business> findBusinessesByApplicationUser(String username);
 }

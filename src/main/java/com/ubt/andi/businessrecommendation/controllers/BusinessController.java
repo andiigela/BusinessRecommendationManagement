@@ -65,7 +65,7 @@ public class BusinessController {
     @PostMapping("/business/edit/{businessId}")
     public String editBusiness(@ModelAttribute("businessEdit") Business business,
                                @RequestParam("imageFiles") List<MultipartFile> imageFiles) throws IOException{
-            List<Image> images = new ArrayList<>();
+        List<Image> images = new ArrayList<>();
         for(MultipartFile imageFile : imageFiles){
             if(!imageFile.isEmpty()){
                 Image image = new Image();
@@ -91,18 +91,7 @@ public class BusinessController {
                               ) throws IOException {
         return "redirect:/business/list";
     }*/
-    @GetMapping("/search")
-    public String searchForm(Model model){
-        model.addAttribute("business", new Business());
-        return "search-page";
-    }
-    @GetMapping("/search/")
-    public String searchByName(@RequestParam("name") String name,Model model){
-        List<Business> businessListByName = businessService.findBusinessesByName(name);
-        System.out.println("Size: " + businessListByName.size());
-        model.addAttribute("businesses",businessListByName);
-        return "search-results";
-    }
+
     /*
     @PostMapping("/business/deleteImage")
     public String deleteImage(@RequestParam("imageToDelete") String imageUrl) throws IOException{
