@@ -91,18 +91,7 @@ public class BusinessController {
                               ) throws IOException {
         return "redirect:/business/list";
     }*/
-    @GetMapping("/search")
-    public String searchForm(Model model){
-        model.addAttribute("business", new Business());
-        return "search-page";
-    }
-    @GetMapping("/search/")
-    public String searchByName(@RequestParam("name") String name,Model model){
-        List<Business> businessListByName = businessService.findBusinessesByName(name);
-        System.out.println("Size: " + businessListByName.size());
-        model.addAttribute("businesses",businessListByName);
-        return "search-results";
-    }
+
     /*
     @PostMapping("/business/deleteImage")
     public String deleteImage(@RequestParam("imageToDelete") String imageUrl) throws IOException{
