@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:replace="layout :: common-resources" />
+</head>
+<body>
+  <div th:replace="layout :: content"></div>
+  <div class="container">
+    <div th:each="user:${usersWithRoles}">
+        <p th:text="${user.email}" th:if="${user.getRoles().contains(userRole) || user.getRoles().contains(adminRole)}"></p>
+        <div th:each="role:${user.roles}">
+            <form method="post" th:action="@{/roles/remove/{userid}/{roleid}(userid=${user.id},roleid=${role.id})}">
+                <button type="submit">Delete <span th:text="${role.name}"></span></button>
+            </form>
+            <form method="post" th:action="@{/roles/addrole/{userid}/{roleid}(userid=${user.id},roleid=${userRole.id})}">
+              <button type="submit" th:if="${!user.getRoles().contains(userRole)}">Add <span th:text="${userRole.name}"></span></button>
+            </form>
+            <form method="post" th:action="@{/roles/addrole/{userid}/{roleid}(userid=${user.id},roleid=${adminRole.id})}">
+              <button type="submit" th:if="${!user.getRoles().contains(adminRole)}">Add <span th:text="${adminRole.name}"></span></button>
+            </form>
+        </div>
+
+    </div>
+  </div>
+  <th:block th:replace="layout :: common-scripts"></th:block>
+
+</body>
+</html>
