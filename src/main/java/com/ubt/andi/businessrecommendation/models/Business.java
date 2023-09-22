@@ -24,17 +24,18 @@ public class Business  {
     private List<Image> images = new ArrayList<Image>();
     @Transient
     private List<MultipartFile> imageFiles = new ArrayList<>();
-    @Override
-    public boolean equals(Object obj){
-        if(obj instanceof Business){
-            Business b = (Business) obj;
-            if(b.id == this.id){
-                return true;
-            }
-        }
-        return false;
-    }
+    @Transient
+    private List<Byte> starValues = new ArrayList<>();
+    private double ratingValue=0.0;
     @ManyToOne
     @JoinColumn(name = "applicationuser_id",nullable = false)
     private ApplicationUser applicationUser;
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "rating",
+            joinColumns = {@JoinColumn(name = "business_id")},
+            inverseJoinColumns = {@JoinColumn(name="user_id")}
+    )
+    private List<ApplicationUser> ratedByUsers = new ArrayList<>();
+
 }

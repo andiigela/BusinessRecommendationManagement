@@ -39,4 +39,6 @@ public class ApplicationUser {
     private List<Role> roles = new ArrayList<>();
     @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.LAZY,mappedBy = "applicationUser")
     private List<Business> businesses = new ArrayList<>();
+    @ManyToMany(mappedBy = "ratedByUsers")
+    private List<Business> ratedBusinesses = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.ubt.andi.businessrecommendation.services;
 
 import com.ubt.andi.businessrecommendation.models.ApplicationUser;
+import com.ubt.andi.businessrecommendation.models.Business;
 
 import java.util.List;
 
