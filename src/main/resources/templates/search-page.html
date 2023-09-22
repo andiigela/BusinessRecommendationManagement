@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:replace="layout :: common-resources"/>
+</head>
+<body>
+  <div th:replace="layout :: content"></div>
+  <div class="container">
+      <h2>Search</h2>
+      <div class="input-group">
+          <form method="post" th:action="@{/search}">
+              <div style="display: flex; flex-direction: row;padding-left: 0%">
+                  <input type="search" name="businessName" class="form-control rounded" style="width: 400px" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                  <button type="submit" class="btn btn-primary">search</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  <th:block th:replace="layout::common-scripts"></th:block>
+</body>
+</html>

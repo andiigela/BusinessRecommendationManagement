@@ -1,6 +1,7 @@
 package com.ubt.andi.businessrecommendation.services;
 
 import com.ubt.andi.businessrecommendation.models.ApplicationUser;
+import com.ubt.andi.businessrecommendation.models.Business;
 import com.ubt.andi.businessrecommendation.models.Role;
 import com.ubt.andi.businessrecommendation.repositories.ApplicationUserRepository;
 import com.ubt.andi.businessrecommendation.repositories.RoleRepository;
@@ -30,7 +31,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         if(role == null) return;
         //user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setPassword(user.getPassword());
-        user.setRoles(Arrays.asList(role));
+        user.getRoles().add(role);
         userRepository.save(user);
     }
     @Override
