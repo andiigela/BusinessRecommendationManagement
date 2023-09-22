@@ -1,5 +1,4 @@
 package com.ubt.andi.businessrecommendation.controllers;
-
 import com.ubt.andi.businessrecommendation.models.ApplicationUser;
 import com.ubt.andi.businessrecommendation.models.Business;
 import com.ubt.andi.businessrecommendation.services.ApplicationUserService;
@@ -11,6 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import com.ubt.andi.businessrecommendation.models.Business;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -42,5 +45,9 @@ public class SearchController {
         model.addAttribute("user",user);
         return "search-page-data";
     }
-
+    @GetMapping("/search")
+    public String searchPage(Model model){
+        model.addAttribute("businesses",new ArrayList<Business>());
+        return "search-page";
+    }
 }

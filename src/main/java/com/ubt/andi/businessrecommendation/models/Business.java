@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Data
 @Entity
 public class Business  {
@@ -24,6 +23,7 @@ public class Business  {
     private List<Image> images = new ArrayList<Image>();
     @Transient
     private List<MultipartFile> imageFiles = new ArrayList<>();
+
     @Transient
     private List<Byte> starValues = new ArrayList<>();
     private double ratingValue=0.0;
@@ -37,5 +37,18 @@ public class Business  {
             inverseJoinColumns = {@JoinColumn(name="user_id")}
     )
     private List<ApplicationUser> ratedByUsers = new ArrayList<>();
-
+  
+    @Override
+    public boolean equals(Object obj){
+        if(obj instanceof Business){
+            Business b = (Business) obj;
+            if(b.id == this.id){
+                return true;
+            }
+        }
+        return false;
+    }
+    @ManyToOne
+    @JoinColumn(name = "applicationuser_id",nullable = false)
+    private ApplicationUser applicationUser;
 }
