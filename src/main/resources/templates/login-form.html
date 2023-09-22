@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link th:replace="layout :: common-resources"/>
+</head>
+<body>
+<div th:replace="layout :: content"></div>
+<div class="container">
+  <form method="post" style="margin-top: 88px" th:action="@{/login}" th:object="${loggedInUser}">
+    <h2 style="margin-bottom: 15px">Login</h2>
+    <div class="form-group">
+      <label for="exampleInputUsername">Username</label>
+      <input type="text" th:field="${loggedInUser.username}" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" th:field="${loggedInUser.password}" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+</div>
+<th:block th:replace="layout :: common-scripts"></th:block>
+</body>
+</html>
